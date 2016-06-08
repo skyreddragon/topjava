@@ -1,22 +1,13 @@
 package ru.javawebinar.topjava.dao.mock;
 
 import ru.javawebinar.topjava.model.UserMeal;
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MemoryDataSource {
-    private final Map<Long, UserMeal> mealList = new ConcurrentSkipListMap<Long, UserMeal>() {
-        {
-            put(1L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 10, 12), "Завтрак", 500));
-            put(2L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 12, 15), "Обед", 500));
-            put(3L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 30, 18, 21), "Ужин", 1501));
-            put(4L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 10, 12), "Завтрак", 500));
-            put(5L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 18, 21), "Ужин", 500));
-            put(6L, new UserMeal(LocalDateTime.of(2015, Month.MAY, 31, 10, 12), "Завтрак", 500));
-        }
-    };
+    private final Map<Long, UserMeal> mealList = new ConcurrentSkipListMap<>();
+    private AtomicLong counter = new AtomicLong(mealList.size());
 
     private MemoryDataSource() {
 
@@ -35,6 +26,7 @@ public class MemoryDataSource {
     }
 
     public void createMeal(UserMeal meal) {
+        meal.setId(counter.incrementAndGet());
         mealList.put(meal.getId(), meal);
     }
 

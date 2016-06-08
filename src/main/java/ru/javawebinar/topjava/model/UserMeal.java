@@ -2,16 +2,15 @@ package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class UserMeal {
     private long id;
-    private static final AtomicInteger counter = new AtomicInteger(1);
     private LocalDateTime dateTime;
     private String description;
     private int calories;
 
     public UserMeal(LocalDateTime dateTime, String description, int calories) {
-        this.id = counter.getAndIncrement();
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
