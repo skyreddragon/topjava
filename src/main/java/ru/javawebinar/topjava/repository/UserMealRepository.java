@@ -11,9 +11,12 @@ import java.util.Collection;
 public interface UserMealRepository {
     UserMeal save(UserMeal userMeal);
 
-    void delete(int id);
+    // false if not found
+    boolean delete(int id);
 
+    // null if not found
     UserMeal get(int id);
 
+    // null if not found
     Collection<UserMeal> getAll();
 }
