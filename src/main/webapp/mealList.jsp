@@ -17,8 +17,23 @@
 </head>
 <body>
 <section>
-    <h2><a href="index.html">Home</a></h2>
+    <h2><a href="index.jsp">Home</a></h2>
     <h3>Meal list</h3>
+    <table>
+        <form method="post" action="meals">
+            <tr>
+                <td>From Date:<input type="date" name="startDate"></td>
+                <td>From Time:<input type="time" name="startTime"></td>
+            </tr>
+            <tr>
+                <td>To Date:<input style="margin-left: 18px" type="date" name="endDate"></td>
+                <td>To Time:<input style="margin-left: 18px" type="time" name="endTime"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="Filter"></td>
+            </tr>
+        </form>
+    </table>
     <a href="meals?action=create">Add Meal</a>
     <hr>
     <table border="1" cellpadding="8" cellspacing="0">

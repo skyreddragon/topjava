@@ -1,57 +1,71 @@
 package ru.javawebinar.topjava.repository.mock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.LoggedUser;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.repository.UserMealRepository;
 import ru.javawebinar.topjava.util.UserMealsUtil;
+import ru.javawebinar.topjava.web.to.UserMealWithExceed;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-/**
- * GKislin
- * 15.09.2015.
- */
+
+@Repository
 public class InMemoryUserMealRepositoryImpl implements UserMealRepository {
-    private Map<Integer,UserMeal> repository = new ConcurrentHashMap<>();
+    private Map<Integer, Map<Integer, UserMeal>> repository = new ConcurrentHashMap<>();
+
     private AtomicInteger counter = new AtomicInteger(0);
 
+    private static final Logger LOG = LoggerFactory.getLogger(InMemoryUserMealRepositoryImpl.class);
+
     {
-        UserMealsUtil.MEAL_LIST.forEach(this::save);
+        UserMealsUtil.MEAL_LIST.forEach(um -> this.save(1, um));
     }
 
     @Override
-    public UserMeal save(UserMeal userMeal) {
+    public UserMeal save(int userId, UserMeal userMeal) {
+        LOG.info("save " + userMeal);
         if (userMeal.isNew()) {
             userMeal.setId(counter.incrementAndGet());
         }
-        repository.put(userMeal.getId(), userMeal);
+        if (repository.get(userId) == null) {
+            repository.put(userId, new HashMap<>());
+        }
+        repository.get(userId).put(userMeal.getId(), userMeal);
         return userMeal;
     }
 
     @Override
-    public boolean delete(int id) {
-        UserMeal meal = repository.remove(id);
+    public boolean delete(int id, int userId) {
+        LOG.info("delete " + id);
+        if (repository.get(userId) == null) return false;
+        UserMeal meal = repository.get(userId).remove(id);
         return meal != null;
     }
 
     @Override
-    public UserMeal get(int id) {
-        return repository.get(id);
+    public UserMeal get(int userId, int id) {
+        LOG.info("get " + id);
+        if (repository.get(userId) == null) return null;
+        return repository.get(userId).get(id);
     }
 
     @Override
-    public Collection<UserMeal> getAll() {
-        return repository.values()
+    public List<UserMeal> getAll(int userId) {
+        LOG.info("getAll");
+        if (repository.values().isEmpty() || repository.get(userId) == null) return Collections.emptyList();
+        return repository.get(userId).values()
                 .stream()
                 .sorted((u1, u2) -> u2.getDateTime().compareTo(u1.getDateTime())).collect(Collectors.toList());
-
     }
 }
 

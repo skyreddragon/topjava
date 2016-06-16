@@ -2,10 +2,6 @@ package ru.javawebinar.topjava.web.to;
 
 import java.time.LocalDateTime;
 
-/**
- * GKislin
- * 11.01.2015.
- */
 public class UserMealWithExceed {
     private final Integer id;
 

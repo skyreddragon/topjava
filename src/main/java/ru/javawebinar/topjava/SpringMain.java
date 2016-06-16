@@ -8,10 +8,6 @@ import ru.javawebinar.topjava.web.user.AdminRestController;
 
 import java.util.Arrays;
 
-/**
- * User: gkislin
- * Date: 22.08.2014
- */
 public class SpringMain {
     public static void main(String[] args) {
         // java 7 Automatic resource management
