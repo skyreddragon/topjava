@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * GKislin
@@ -8,11 +9,15 @@ import java.time.LocalDateTime;
  */
 public class UserMeal extends BaseEntity {
 
-    private final LocalDateTime dateTime;
+    private LocalDateTime dateTime;
 
-    private final String description;
+    private String description;
 
-    private final int calories;
+    private int calories;
+
+    public UserMeal() {
+
+    }
 
     public UserMeal(LocalDateTime dateTime, String description, int calories) {
         this(null, dateTime, description, calories);
@@ -37,6 +42,18 @@ public class UserMeal extends BaseEntity {
         return calories;
     }
 
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
+
     @Override
     public String toString() {
         return "UserMeal{" +
@@ -45,5 +62,19 @@ public class UserMeal extends BaseEntity {
                 ", description='" + description + '\'' +
                 ", calories=" + calories +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        UserMeal meal = (UserMeal) o;
+        return Objects.equals(meal.toString(), this.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
     }
 }
