@@ -71,11 +71,17 @@ public class JdbcUserRepositoryImpl implements UserRepository {
             user.setId(newKey.intValue());
             insertRoles(user);
         } else {
+            deleteRoles(user);
+            insertRoles(user);
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", userMap);
         }
         return user;
+    }
+
+    private void deleteRoles(User user) {
+        jdbcTemplate.update("DELETE FROM user_roles WHERE user_id=?", user.getId());
     }
 
     private void insertRoles(User user) {
