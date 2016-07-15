@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -44,14 +46,12 @@ public class JdbcUserRepositoryImpl implements UserRepository {
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private SimpleJdbcInsert insertUser;
-    private SimpleJdbcInsert insertRole;
 
     @Autowired
     public JdbcUserRepositoryImpl(DataSource dataSource) {
         this.insertUser = new SimpleJdbcInsert(dataSource)
                 .withTableName("USERS")
                 .usingGeneratedKeyColumns("id");
-        this.insertRole = new SimpleJdbcInsert(dataSource).withTableName("USER_ROLES");
     }
 
     @Override
@@ -69,16 +69,30 @@ public class JdbcUserRepositoryImpl implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(userMap);
             user.setId(newKey.intValue());
-            MapSqlParameterSource roleMap = new MapSqlParameterSource()
-                    .addValue("user_id", user.getId())
-                    .addValue("role", user.getRoles());
-            insertRole.execute(roleMap);
+            insertRoles(user);
         } else {
             namedParameterJdbcTemplate.update(
                     "UPDATE users SET name=:name, email=:email, password=:password, " +
                             "registered=:registered, enabled=:enabled, calories_per_day=:caloriesPerDay WHERE id=:id", userMap);
         }
         return user;
+    }
+
+    private void insertRoles(User user) {
+        Set<Role> roles = user.getRoles();
+        Iterator<Role> iterator = roles.iterator();
+        jdbcTemplate.batchUpdate("INSERT INTO user_roles (user_id, role) VALUES (?,?)", new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                ps.setInt(1, user.getId());
+                ps.setString(2, iterator.next().name());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return roles.size();
+            }
+        });
     }
 
     @Override
