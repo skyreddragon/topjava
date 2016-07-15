@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.jpa;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.User;
@@ -42,7 +43,9 @@ public class JpaUserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(int id) {
-        return em.find(User.class, id);
+//        return em.find(User.class, id);
+        List<User> users = em.createNamedQuery(User.GET).setParameter(1, id).getResultList();
+        return DataAccessUtils.singleResult(users);
     }
 
     @Override

@@ -26,14 +26,15 @@ public interface ProxyUserRepository extends JpaRepository<User, Integer> {
     User save(User user);
 
     @Override
-    User findOne(Integer id);
+    @Query("SELECT DISTINCT  u FROM User u LEFT JOIN FETCH u.roles WHERE u.id =:id")
+    User findOne(@Param("id") Integer id);
 
     @Override
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
+    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles ORDER BY u.name, u.email")
     List<User> findAll();
 
     User getByEmail(String email);
 
-    @Query("SELECT u FROM User u LEFT JOIN FETCH u.meals WHERE u.id = ?1")
+    @Query("SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.meals LEFT JOIN FETCH u.roles WHERE u.id = ?1")
     User getWithMeals(Integer id);
 }

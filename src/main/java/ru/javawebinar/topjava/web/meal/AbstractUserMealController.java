@@ -3,7 +3,6 @@ package ru.javawebinar.topjava.web.meal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.AuthorizedUser;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.service.UserMealService;
@@ -15,13 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-/**
- * GKislin
- * 06.03.2015.
- */
-@Controller
-public class UserMealRestController {
-    private static final Logger LOG = LoggerFactory.getLogger(UserMealRestController.class);
+abstract public class AbstractUserMealController {
+    protected final Logger LOG = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserMealService service;
@@ -65,7 +59,7 @@ public class UserMealRestController {
         return UserMealsUtil.getFilteredWithExceeded(
                 service.getBetweenDates(
                         startDate != null ? startDate : TimeUtil.MIN_DATE, endDate != null ? endDate : TimeUtil.MAX_DATE, userId),
-                        startTime != null ? startTime : LocalTime.MIN, endTime != null ? endTime : LocalTime.MAX, AuthorizedUser.getCaloriesPerDay()
+                startTime != null ? startTime : LocalTime.MIN, endTime != null ? endTime : LocalTime.MAX, AuthorizedUser.getCaloriesPerDay()
         );
     }
 }
