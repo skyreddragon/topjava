@@ -5,7 +5,7 @@ function makeEditable() {
     });
 
     $('.delete').click(function () {
-        deleteRow($(this).attr("id"));
+        deleteRow($(this).closest('tr').attr("id"));
     });
 
     $('#detailsForm').submit(function () {
@@ -13,9 +13,45 @@ function makeEditable() {
         return false;
     });
 
-    $(document).ajaxError(function (event, jqXHR, options, jsExc) {
-        failNoty(event, jqXHR, options, jsExc);
+    $('#filterForm').submit(function () {
+        filter();
+        return false;
     });
+}
+
+$(document).ajaxError(function (event, jqXHR, options, jsExc) {
+    failNoty(event, jqXHR, options, jsExc);
+});
+
+function changeActive(checkBox) {
+    var enabled = checkBox.is(':checked');
+    $.ajax({
+        url: ajaxUrl + checkBox.attr('id'),
+        type: 'POST',
+        data: {
+            enabled: enabled
+        },
+        success: function () {
+            successNoty(enabled ? 'Enabled' : 'Disabled')
+        }
+    })
+}
+
+function filter() {
+    var form = $('#filterForm');
+    $.ajax({
+        url: ajaxUrl + 'between',
+        type: 'POST',
+        data: form.serialize(),
+        success: function (data) {
+            datatableApi.clear();
+            $.each(data, function (key, item) {
+                datatableApi.row.add(item);
+            });
+            datatableApi.draw();
+            successNoty('Filtered')
+        }
+    })
 }
 
 function deleteRow(id) {
@@ -31,11 +67,11 @@ function deleteRow(id) {
 
 function updateTable() {
     $.get(ajaxUrl, function (data) {
-        datatableApi.fnClearTable();
+        datatableApi.clear();
         $.each(data, function (key, item) {
-            datatableApi.fnAddData(item);
+            datatableApi.row.add(item);
         });
-        datatableApi.fnDraw();
+        datatableApi.draw();
     });
 }
 
