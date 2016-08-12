@@ -1,10 +1,17 @@
 var form;
+var filterForm;
 
 function makeEditable() {
     form = $('#detailsForm');
+    filterForm = $('#filter');
 
     form.submit(function () {
         save();
+        return false;
+    });
+
+    filterForm.submit(function () {
+        filterTable();
         return false;
     });
 
@@ -68,7 +75,16 @@ function save() {
         }
     });
 }
-
+function filterTable() {
+    $.ajax({
+        type: 'POST',
+        url: ajaxUrl + 'filter',
+        data: filterForm.serialize(),
+        success: function (data) {
+            updateTableByData(data)
+        }
+    });
+}
 var failedNote;
 
 function closeNoty() {

@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.to;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.javawebinar.topjava.util.converter.CustomLocalDateTimeSerializer;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +12,7 @@ import java.time.LocalDateTime;
  */
 public class UserMealWithExceed {
     private final Integer id;
-
+    @JsonSerialize(using = CustomLocalDateTimeSerializer.class)
     private final LocalDateTime dateTime;
 
     private final String description;

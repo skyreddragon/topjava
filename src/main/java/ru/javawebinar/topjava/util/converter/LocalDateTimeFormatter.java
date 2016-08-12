@@ -10,7 +10,7 @@ import java.util.Locale;
 public class LocalDateTimeFormatter implements Formatter<LocalDateTime> {
     @Override
     public LocalDateTime parse(String s, Locale locale) throws ParseException {
-        return LocalDateTime.parse(s);
+        return TimeUtil.parseLocalDateTime(s);
     }
 
     @Override

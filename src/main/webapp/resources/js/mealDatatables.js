@@ -2,13 +2,7 @@ var ajaxUrl = 'ajax/profile/meals/';
 var datatableApi;
 
 function updateTable() {
-    $.ajax({
-        url: ajaxUrl + 'filter',
-        type: 'POST',
-        data: $('#filter').serialize(),
-        success: updateTableByData
-    });
-    return false;
+    $.get(ajaxUrl, updateTableByData);
 }
 
 $(function () {
@@ -67,18 +61,26 @@ $(function () {
     });
     $('#startDate').datetimepicker({
         timepicker: false,
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        lang: 'ru'
     });
     $('#endDate').datetimepicker({
         timepicker: false,
-        format: 'Y-m-d'
+        format: 'Y-m-d',
+        lang: 'ru'
     });
     $('#startTime').datetimepicker({
         datepicker: false,
-        format: 'H:i'
+        format: 'H:i',
+        lang: 'ru'
     });
     $('#endTime').datetimepicker({
         datepicker: false,
-        format: 'H:i'
+        format: 'H:i',
+        lang: 'ru'
+    });
+    $('#dateTime').datetimepicker({
+        format: 'Y-m-d H:i',
+        lang: 'ru'
     })
 });

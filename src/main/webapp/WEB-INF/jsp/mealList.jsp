@@ -45,7 +45,7 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-8">
-                            <button type="submit" class="btn btn-primary pull-right" onclick="updateTable()">Filter</button>
+                            <button type="submit" class="btn btn-primary pull-right">Filter</button>
                         </div>
                     </div>
                 </form>
@@ -96,7 +96,7 @@
                         <label for="dateTime" class="control-label col-xs-3">Date</label>
 
                         <div class="col-xs-9">
-                            <input type="datetime-local" class="form-control" id="dateTime"
+                            <input type="text" class="form-control" id="dateTime"
                                    name="dateTime" placeholder="Date">
                         </div>
                     </div>
