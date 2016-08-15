@@ -7,6 +7,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.web.ExceptionInfoHandler;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -30,13 +31,12 @@ public class AdminRestController extends AbstractUserController implements Excep
     }
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> createWithLocation(@RequestBody User user) {
+    public ResponseEntity<User> createWithLocation(@Valid @RequestBody User user) {
         User created = super.create(user);
 
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
                 .buildAndExpand(created.getId()).toUri();
-
 //        HttpHeaders httpHeaders = new HttpHeaders();
 //        httpHeaders.setLocation(uriOfNewResource);
 

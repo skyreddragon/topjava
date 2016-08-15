@@ -6,6 +6,8 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -52,5 +54,21 @@ public interface ExceptionInfoHandler {
             LOG.warn("Exception at request " + req.getRequestURL() + ": " + e.toString());
         }
         return new ErrorInfo(req.getRequestURL(), e);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(BindException.class)
+    @ResponseBody
+    @Order(Ordered.HIGHEST_PRECEDENCE + 2)
+    default ErrorInfo validationError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    @Order(Ordered.HIGHEST_PRECEDENCE + 3)
+    default ErrorInfo restValidationError(HttpServletRequest req, Exception e) {
+        return logAndGetErrorInfo(req, e, true);
     }
 }
