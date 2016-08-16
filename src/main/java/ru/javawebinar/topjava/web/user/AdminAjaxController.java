@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/ajax/admin/users")
-public class AdminAjaxController extends AbstractUserController implements ExceptionInfoHandler {
+public class AdminAjaxController extends AbstractUserController {
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<User> getAll() {

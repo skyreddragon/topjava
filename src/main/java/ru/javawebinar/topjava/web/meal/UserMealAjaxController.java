@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/ajax/profile/meals")
-public class UserMealAjaxController extends AbstractUserMealController implements ExceptionInfoHandler {
+public class UserMealAjaxController extends AbstractUserMealController {
 
 /*
   Other validation solution:
