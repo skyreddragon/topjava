@@ -14,10 +14,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.util.*;
 
-/**
- * User: gkislin
- * Date: 22.08.2014
- */
 @NamedQueries({
         @NamedQuery(name = User.DELETE, query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.BY_EMAIL, query = "SELECT DISTINCT u FROM User u LEFT JOIN FETCH u.roles WHERE u.email=?1"),

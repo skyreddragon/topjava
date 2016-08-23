@@ -2,10 +2,6 @@ package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
 
-/**
- * User: gkislin
- * Date: 22.08.2014
- */
 @MappedSuperclass
 @Access(AccessType.FIELD)
 //@JsonAutoDetect(fieldVisibility = ANY, getterVisibility = NONE, isGetterVisibility = NONE, setterVisibility = NONE)

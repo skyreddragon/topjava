@@ -15,10 +15,6 @@ import javax.sql.DataSource;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * User: gkislin
- * Date: 26.08.2014
- */
 @Transactional(readOnly = true)
 public abstract class AbstractJdbcUserMealRepositoryImpl<T> implements UserMealRepository {
 

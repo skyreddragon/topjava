@@ -18,10 +18,6 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * GKislin
- * 06.03.2015.
- */
 @Service("userService")
 public class UserServiceImpl implements UserService, UserDetailsService {
 

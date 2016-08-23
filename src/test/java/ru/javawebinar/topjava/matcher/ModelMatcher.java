@@ -14,12 +14,6 @@ import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
-/**
- * GKislin
- * 06.01.2015.
- *
- * @param <T> : entity
- */
 public class ModelMatcher<T> {
     public interface EntityComparator<T> {
         boolean compare(T expected, T actual);
